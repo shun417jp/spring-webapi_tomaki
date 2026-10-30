@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class ExpenseService {
-
     private final ExpenseRepository expenseRepository;
 
     public ExpenseService(ExpenseRepository expenseRepository) {
@@ -24,7 +23,7 @@ public class ExpenseService {
     public Expense findById(Long id) {
         Expense expense = expenseRepository.findById(id);
 
-        if (expense == null) {
+        if (expense == null){
             throw new ExpenseNotFoundException(id);
         }
 
@@ -51,32 +50,31 @@ public class ExpenseService {
     }
 
     private void validateExpense(Expense expense) {
-        if (expense.getTitle() == null || expense.getTitle().isBlank()) {
+        if (expense.getTitle() == null || expense.getTitle().isBlank()){
             throw new ExpenseArgumentNotValidException(
                     "タイトルを入力してください"
             );
         }
 
-        if (expense.getAmount() == null) {
+        if (expense.getAmount() == null){
             throw new ExpenseArgumentNotValidException(
                     "金額を入力してください"
             );
         }
 
-        if (expense.getAmount() <= 0) {
+        if (expense.getAmount() <= 0){
             throw new ExpenseArgumentNotValidException(
                     "金額は1以上にしてください"
             );
         }
 
-        if (expense.getExpenseDate() == null) {
+        if (expense.getExpenseDate() == null){
             throw new ExpenseArgumentNotValidException(
                     "支出日を入力してください"
             );
         }
 
-        // DBでカテゴリは必須なので、未指定なら「その他」にします。
-        if (expense.getCategory() == null || expense.getCategory().isBlank()) {
+        if (expense.getCategory() == null || expense.getCategory().isBlank()){
             expense.setCategory("OTHER");
         }
 

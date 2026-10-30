@@ -5,31 +5,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>moneylog | 支出一覧</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <script src="app.js?v=2" defer></script>
 </head>
 <body>
   <main>
-    <div class="heading"><h1>支出一覧</h1><button id="new-button" class="primary">支出を登録</button></div>
-    <div id="load-error" class="notice error" role="alert" hidden><span></span><button id="reload-button" class="secondary">再読み込み</button></div>
+    <div class="heading">
+      <h1>支出一覧</h1>
+      <button id="new-button" class="primary">支出を登録</button>
+    </div>
+
+    <div id="load-error" class="notice error" role="alert" hidden>
+      <span></span>
+      <button id="reload-button" class="secondary">再読み込み</button>
+    </div>
+
     <section class="records" aria-label="支出一覧">
-      <div class="toolbar"><label class="search">検索<input id="search" type="search" placeholder="タイトル・メモで検索"></label></div>
-      <div class="table-scroll"><table><thead><tr><th scope="col">支出日</th><th scope="col">タイトル</th><th scope="col">カテゴリ</th><th scope="col">支払方法</th><th scope="col" class="amount">金額</th><th scope="col">操作</th></tr></thead><tbody id="rows"></tbody></table></div>
-      <p id="list-status" class="list-status" role="status">支出を読み込んでいます…</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">支出日</th>
+              <th scope="col">タイトル</th>
+              <th scope="col">カテゴリ</th>
+              <th scope="col">支払方法</th>
+              <th scope="col" class="amount">金額</th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <p id="list-status" class="list-status" role="status">
+        支出を読み込んでいます…
+      </p>
       <div id="list-count" class="list-count" aria-live="polite">読み込み中</div>
     </section>
   </main>
+
   <dialog id="expense-dialog" aria-labelledby="dialog-title">
-    <div class="dialog-heading"><h2 id="dialog-title">支出を登録</h2><button class="close-button" type="button">閉じる</button></div>
+    <div class="dialog-heading">
+      <h2 id="dialog-title">支出を登録</h2>
+      <button class="close-button" type="button">閉じる</button>
+    </div>
+
     <div id="form-error" class="notice error" role="alert" hidden></div>
+
     <form id="expense-form">
-      <label>タイトル <span class="required">必須</span><input name="title" required maxlength="100" placeholder="例：Java参考書"></label>
-      <div class="form-row"><label>金額（円） <span class="required">必須</span><input name="amount" type="number" min="1" max="2147483647" step="1" required placeholder="2800"></label><label>支出日 <span class="required">必須</span><input name="expenseDate" type="date" required></label></div>
-      <div class="form-row"><label>カテゴリ<input name="category" list="categories" maxlength="50" placeholder="未指定は「その他」"><datalist id="categories"><option value="FOOD">食費</option><option value="TRANSPORT">交通費</option><option value="EDUCATION">書籍・学習</option><option value="DAILY">日用品</option><option value="OTHER">その他</option></datalist></label><label>支払方法<input name="paymentMethod" list="payments" maxlength="50" placeholder="選択または入力"><datalist id="payments"><option value="CASH">現金</option><option value="CREDIT_CARD">クレジットカード</option><option value="E_MONEY">電子マネー</option><option value="BANK_TRANSFER">銀行振込</option></datalist></label></div>
-      <label>メモ<textarea name="memo" rows="3" maxlength="255" placeholder="支出についてのメモ（任意）"></textarea></label>
-      <div class="form-actions"><button id="delete-button" type="button" class="danger-text" hidden>この支出を削除</button><div><button type="button" class="secondary close-button">キャンセル</button><button id="edit-button" type="button" class="primary" hidden>編集する</button><button id="save-button" type="submit" class="primary">登録する</button></div></div>
+      <label>
+        タイトル <span class="required">必須</span>
+        <input name="title" required maxlength="100" placeholder="例：Java参考書">
+      </label>
+
+      <div class="form-row">
+        <label>
+          金額（円） <span class="required">必須</span>
+          <input name="amount" type="number" min="1" max="2147483647" step="1" required placeholder="2800">
+        </label>
+        <label>
+          支出日 <span class="required">必須</span>
+          <input name="expenseDate" type="date" required>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          カテゴリ
+          <input name="category" list="categories" maxlength="50" placeholder="未指定は「その他」">
+          <datalist id="categories">
+            <option value="FOOD">食費</option>
+            <option value="TRANSPORT">交通費</option>
+            <option value="EDUCATION">書籍・学習</option>
+            <option value="DAILY">日用品</option>
+            <option value="OTHER">その他</option>
+          </datalist>
+        </label>
+        <label>
+          支払方法
+          <input name="paymentMethod" list="payments" maxlength="50" placeholder="選択または入力">
+          <datalist id="payments">
+            <option value="CASH">現金</option>
+            <option value="CREDIT_CARD">クレジットカード</option>
+            <option value="E_MONEY">電子マネー</option>
+            <option value="BANK_TRANSFER">銀行振込</option>
+          </datalist>
+        </label>
+      </div>
+
+      <label>
+        メモ
+        <textarea name="memo" rows="3" maxlength="255" placeholder="支出についてのメモ（任意）"></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button id="delete-button" type="button" class="danger-text" hidden>
+          この支出を削除
+        </button>
+        <div>
+          <button type="button" class="secondary close-button">キャンセル</button>
+          <button id="save-button" type="submit" class="primary">登録する</button>
+        </div>
+      </div>
     </form>
   </dialog>
-  <dialog id="delete-dialog" aria-labelledby="delete-title"><h2 id="delete-title">支出を削除しますか？</h2><p id="delete-description"></p><p class="muted">削除した支出は元に戻せません。</p><div id="delete-error" class="notice error" role="alert" hidden></div><div class="confirm-actions"><button id="cancel-delete" class="secondary">キャンセル</button><button id="confirm-delete" class="danger">削除する</button></div></dialog>
+
+  <dialog id="delete-dialog" aria-labelledby="delete-title">
+    <h2 id="delete-title">支出を削除しますか？</h2>
+    <p id="delete-description"></p>
+    <p class="muted">削除した支出は元に戻せません。</p>
+    <div id="delete-error" class="notice error" role="alert" hidden></div>
+    <div class="confirm-actions">
+      <button id="cancel-delete" class="secondary">キャンセル</button>
+      <button id="confirm-delete" class="danger">削除する</button>
+    </div>
+  </dialog>
+
   <div id="toast" role="status" hidden></div>
 </body>
 </html>
